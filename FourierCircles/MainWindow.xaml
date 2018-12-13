@@ -1,0 +1,38 @@
+﻿<Window x:Class="FourierCircles.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FourierCircles"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="700">
+    <Grid Margin="200,0,0,0">
+        <ItemsControl ItemsSource="{Binding Harmonics, Mode=TwoWay}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas VerticalAlignment="Center"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Line X1="{Binding Origin.X}" 
+                          Y1="{Binding Origin.Y}" 
+                          X2="{Binding End.X}" 
+                          Y2="{Binding End.Y}"
+                          Stroke="Black"
+                          StrokeThickness="1">
+                    </Line>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Canvas VerticalAlignment="Center">
+            <Line X1="{Binding Last.End.X}"
+                Y1="{Binding Last.End.Y}"
+                X2="200"
+                Y2="{Binding RelativeSource={RelativeSource Self}, Path=Y1}"
+                Stroke="DarkBlue"
+                StrokeThickness="1"/>
+            
+        </Canvas>
+    </Grid>
+</Window>
