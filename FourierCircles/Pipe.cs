@@ -9,28 +9,28 @@ namespace FourierCircles
 {
     public class Pipe<T> : IEnumerable<T>
     {
-        List<T> pipeList;
-        private readonly int capacity;
+        List<T> _pipeList;
+        private readonly int _capacity;
         public Pipe(int capacity)
         {
-            this.capacity = capacity >= 0 ? capacity : 0;
-            pipeList = new List<T>(capacity);
+            _capacity = capacity > 1 ? capacity : 1;
+            _pipeList = new List<T>(_capacity);
         }
         public void Add(T item)
         {
-
+            if (_pipeList.Count >= _capacity) _pipeList.RemoveAt(_pipeList.Count - 1);
+            _pipeList.Insert(0, item);
         }
         public void AddRange(IEnumerable<T> items)
         {
-
+            foreach (var item in items) Add(item);
         }
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerable<KeyValuePair<int,T>> GetPositions()
         {
-            throw new NotImplementedException();
+            int i = 0;
+            return _pipeList.Select(x => new KeyValuePair<int,T>(i++,x)); 
         }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerator<T> GetEnumerator() => _pipeList.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

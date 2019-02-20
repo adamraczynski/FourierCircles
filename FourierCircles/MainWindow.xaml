@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FourierCircles"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="700">
+        Title="MainWindow" Height="500" Width="900">
     <Grid Margin="200,0,0,0">
         <ItemsControl ItemsSource="{Binding Harmonics, Mode=TwoWay}">
             <ItemsControl.ItemsPanel>
@@ -32,7 +32,7 @@
                 Y2="{Binding RelativeSource={RelativeSource Self}, Path=Y1}"
                 Stroke="DarkBlue"
                 StrokeThickness="1"/>
-            
+            <Polyline Canvas.Left="200" Points="{Binding Graph}" Stroke="Black" StrokeThickness="1"/>
         </Canvas>
     </Grid>
 </Window>
