@@ -3,10 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FourierCircles"
+        xmlns:loc="clr-namespace:FourierCircles"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="900">
+    <Window.Resources>
+        <PointCollectionConverter x:Key="pcc"/>
+    </Window.Resources>
     <Grid Margin="200,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <ItemsControl ItemsSource="{Binding Harmonics, Mode=TwoWay}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -32,7 +39,7 @@
                 Y2="{Binding RelativeSource={RelativeSource Self}, Path=Y1}"
                 Stroke="DarkBlue"
                 StrokeThickness="1"/>
-            <Polyline Canvas.Left="200" Points="{Binding Graph}" Stroke="Black" StrokeThickness="1"/>
+            <Polyline Canvas.Left="200" Points="{Binding Graph, Converter={loc:DebugConverter}}" Stroke="Black" StrokeThickness="1"/>
         </Canvas>
     </Grid>
 </Window>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -17,40 +18,40 @@ namespace FourierCircles
     public class MainViewModel :INotifyPropertyChanged
     {
         private Pipe<double> _pipe;
-        public PointCollection Graph { get; set; }
+        public ObservableCollection<Point> Graph { get; set; }
         public ObservableCollection<Harmonic> Harmonics { get; set; }
         public Harmonic Last { get; set; }
-        private Harmonic fourier;
+        private Harmonic _fourier;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
-            fourier = new Harmonic(100, 30, 0.01);
-            fourier.AddHarmonic(40, -30, 0.04).AddHarmonic(20,0,0.08);
-            Harmonics = new ObservableCollection<Harmonic>(fourier.ListHarmonics());
-            _pipe = new Pipe<double>(500);
-            //Graph = new ObservableCollection<Point>(
-            //    Enumerable.Range(0,100)
-            //    .Select(x => new Point(x*2,(x % 2)*20)));
-            Graph = new PointCollection();
+            _fourier = new Harmonic(100, 0, 0.02);
+            _fourier.AddHarmonic(100.0/3, 135, 0.06)
+                .AddHarmonic(100.0/5,0,0.1)
+                .AddHarmonic(100.0/7,135,0.14);
+            Harmonics = new ObservableCollection<Harmonic>(_fourier.ListHarmonics());
+            _pipe = new Pipe<double>(1500);
+            Graph = new ObservableCollection<Point>();
             Last = Harmonics.Last();
         }
+
         public void Run()
         {
-            var dt = new DispatcherTimer();
-            dt.Tick += (s, e) =>
+            var _dt = new DispatcherTimer();
+            _dt.Tick += (s, e) =>
             {
                 _pipe.Add(Last.End.Y);
-                Graph.Add(new Point(Last.End.Y, Last.End.Y));
-                //OnPropertyChanged("Graph");
-                fourier.Tick();
+                var _pts = _pipe.GetPositions().Select(x => new Point(x.Key, x.Value));
+                Graph = new ObservableCollection<Point>(_pts);
+                _fourier.Tick();
                 OnPropertyChanged("Graph");
             };
-            dt.Interval = TimeSpan.FromMilliseconds(20);
-            dt.Start();
+            _dt.Interval = TimeSpan.FromMilliseconds(20);
+            _dt.Start();
         }
-        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
+        protected void OnPropertyChanged(string name) 
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
