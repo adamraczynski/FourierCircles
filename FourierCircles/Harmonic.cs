@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FourierCircles.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace FourierCircles
         public double Length { get; set; }
         public double Phase { get; set; }
         public Point Origin { get; set; }
-        public Point End => new Point(Origin.X + Math.Sin(Phase) * Length, Origin.Y + Math.Cos(Phase) * Length);
+        public Point End => new Point(Origin.X + Math.Sin(MathExt.RadToAngle(Phase)) * Length
+                , Origin.Y + Math.Cos(MathExt.RadToAngle(Phase)) * Length);
         public double Freq { get; set; }
         public Harmonic SubHarmonic { get; private set; }
         public Harmonic ParentHarmonic { get; private set; }

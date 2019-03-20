@@ -27,10 +27,17 @@ namespace FourierCircles
 
         public MainViewModel()
         {
-            _fourier = new Harmonic(100, 0, 0.02);
-            _fourier.AddHarmonic(100.0/3, 135, 0.06)
-                .AddHarmonic(100.0/5,0,0.1)
-                .AddHarmonic(100.0/7,135,0.14);
+            var amplify = 300 / Math.PI;
+            _fourier = new Harmonic(amplify, 90, 2);
+            _fourier.AddHarmonic(amplify / 3, 90, 6)
+                .AddHarmonic(amplify / 5, 90, 10)
+                .AddHarmonic(amplify / 7, 90, 14)
+                .AddHarmonic(amplify / 9, 90, 18)
+                .AddHarmonic(amplify / 11, 90, 22)
+                .AddHarmonic(amplify / 13, 90, 26)
+                .AddHarmonic(amplify / 15, 90, 30)
+                .AddHarmonic(amplify / 17, 90, 34)
+                .AddHarmonic(amplify / 19, 90, 38);
             Harmonics = new ObservableCollection<Harmonic>(_fourier.ListHarmonics());
             _pipe = new Pipe<double>(1500);
             Graph = new ObservableCollection<Point>();
