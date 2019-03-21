@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FourierCirclesTests
 {
-    class SeriesTests
+    public class SeriesTests
     {
     }
 }

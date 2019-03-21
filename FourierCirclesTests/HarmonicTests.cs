@@ -28,5 +28,26 @@ namespace FourierCirclesTests
             Assert.Equal(new Point(0,0), roi.Origin);
             Assert.Single(roi.ListHarmonics());
         }
+        [Fact]
+        public void ChainHarmonics()
+        {
+            var roi = new Harmonic(1, 0, 1);
+            roi.AddHarmonic(1, 0, 1).AddHarmonic(1, 0, 1);
+            Assert.NotSame(roi.SubHarmonic.ParentHarmonic, roi.SubHarmonic.SubHarmonic);
+            Assert.Null(roi.ParentHarmonic);
+            Assert.Equal(roi.SubHarmonic.Origin, roi.End);
+            Assert.Equal(roi.SubHarmonic.SubHarmonic.Origin, roi.SubHarmonic.End);
+            Assert.Equal(new Point(0, 3), roi.SubHarmonic.SubHarmonic.End);
+        }
+
+        [Fact]
+        public void TickTock()
+        {
+            var roi = new Harmonic(1, 0, 90);
+            roi.Tick();
+            Assert.Equal(1, roi.End.X,1);
+            Assert.Equal(0, roi.End.Y, 1);
+
+        }
     }
 }
