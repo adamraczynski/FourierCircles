@@ -9,6 +9,7 @@ namespace FourierCircles
     public class Series
     {
         private readonly List<Harmonic> _harmonics;
+        private Harmonic _lastHarmonic;
         public IEnumerable<Harmonic> Harmonics => _harmonics;
         public Series()
         {
@@ -17,9 +18,13 @@ namespace FourierCircles
 
         public Harmonic AddHarmonic(double amplify, double phase, double freq)
         {
-            var harmonic = new Harmonic(amplify, phase, freq);
-            _harmonics.Add(harmonic);
-            return harmonic;
+            _lastHarmonic = _lastHarmonic == null 
+                ? new Harmonic(amplify, phase, freq)
+                : _lastHarmonic.AddHarmonic(amplify, phase, freq);
+            _harmonics.Add(_lastHarmonic);
+            return _lastHarmonic;
         }
+
+        public void Tick() => _harmonics.FirstOrDefault()?.Tick();
     }
 }

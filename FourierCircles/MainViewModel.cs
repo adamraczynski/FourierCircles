@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Threading;
+using FourierCircles.Extensions;
 
 namespace FourierCircles
 {
@@ -21,24 +22,26 @@ namespace FourierCircles
         public ObservableCollection<Point> Graph { get; set; }
         public ObservableCollection<Harmonic> Harmonics { get; set; }
         public Harmonic Last { get; set; }
-        private Harmonic _fourier;
+        private Series _series;
+       // private Harmonic _fourier;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
-            var amplify = 300 / Math.PI;
-            _fourier = new Harmonic(amplify, 90, 2);
-            _fourier.AddHarmonic(amplify / 3, 90, 6)
-                .AddHarmonic(amplify / 5, 90, 10)
-                .AddHarmonic(amplify / 7, 90, 14)
-                .AddHarmonic(amplify / 9, 90, 18)
-                .AddHarmonic(amplify / 11, 90, 22)
-                .AddHarmonic(amplify / 13, 90, 26)
-                .AddHarmonic(amplify / 15, 90, 30)
-                .AddHarmonic(amplify / 17, 90, 34)
-                .AddHarmonic(amplify / 19, 90, 38);
-            Harmonics = new ObservableCollection<Harmonic>(_fourier.ListHarmonics());
+            var _amplify = 300 / Math.PI;
+            _series = new Series();
+            _series.NewHarmonic(_amplify, 90, 2)
+                .NewHarmonic(_amplify / 3, 90, 6)
+                .NewHarmonic(_amplify / 5, 90, 10)
+                .NewHarmonic(_amplify / 7, 90, 14)
+                .NewHarmonic(_amplify / 9, 90, 18)
+                .NewHarmonic(_amplify / 11, 90, 22)
+                .NewHarmonic(_amplify / 13, 90, 26)
+                .NewHarmonic(_amplify / 15, 90, 30)
+                .NewHarmonic(_amplify / 17, 90, 34)
+                .NewHarmonic(_amplify / 19, 90, 38);
+            Harmonics = new ObservableCollection<Harmonic>(_series.Harmonics);
             _pipe = new Pipe<double>(1500);
             Graph = new ObservableCollection<Point>();
             Last = Harmonics.Last();
@@ -52,7 +55,7 @@ namespace FourierCircles
                 _pipe.Add(Last.End.Y);
                 var _pts = _pipe.GetPositions().Select(x => new Point(x.Key, x.Value));
                 Graph = new ObservableCollection<Point>(_pts);
-                _fourier.Tick();
+                _series.Tick();
                 OnPropertyChanged("Graph");
             };
             _dt.Interval = TimeSpan.FromMilliseconds(20);
