@@ -23,24 +23,27 @@ namespace FourierCircles
         public ObservableCollection<Harmonic> Harmonics { get; set; }
         public Harmonic Last { get; set; }
         private Series _series;
-       // private Harmonic _fourier;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainViewModel()
         {
-            var _amplify = 300 / Math.PI;
+            //var _amplify = 300 / Math.PI;
+            //_series = new Series();
+            //_series.NewHarmonic(_amplify, 90, 2)
+            //    .NewHarmonic(_amplify / 3, 90, 6)
+            //    .NewHarmonic(_amplify / 5, 90, 10)
+            //    .NewHarmonic(_amplify / 7, 90, 14)
+            //    .NewHarmonic(_amplify / 9, 90, 18)
+            //    .NewHarmonic(_amplify / 11, 90, 22)
+            //    .NewHarmonic(_amplify / 13, 90, 26)
+            //    .NewHarmonic(_amplify / 15, 90, 30)
+            //    .NewHarmonic(_amplify / 17, 90, 34)
+            //    .NewHarmonic(_amplify / 19, 90, 38);
             _series = new Series();
-            _series.NewHarmonic(_amplify, 90, 2)
-                .NewHarmonic(_amplify / 3, 90, 6)
-                .NewHarmonic(_amplify / 5, 90, 10)
-                .NewHarmonic(_amplify / 7, 90, 14)
-                .NewHarmonic(_amplify / 9, 90, 18)
-                .NewHarmonic(_amplify / 11, 90, 22)
-                .NewHarmonic(_amplify / 13, 90, 26)
-                .NewHarmonic(_amplify / 15, 90, 30)
-                .NewHarmonic(_amplify / 17, 90, 34)
-                .NewHarmonic(_amplify / 19, 90, 38);
+            _series.Initiate(0, 250, 90, 2);
+            _series.Expression((a, n) => a / Math.PI / (2 * n - 1), (t, n) => t * (2 * n - 1));
+            _series.Times(50);
             Harmonics = new ObservableCollection<Harmonic>(_series.Harmonics);
             _pipe = new Pipe<double>(1500);
             Graph = new ObservableCollection<Point>();

@@ -43,7 +43,23 @@ namespace FourierCirclesTests
             roi.Tick();
             Assert.Equal(1, last.End.X, 1);
             Assert.Equal(0, last.End.Y, 1);
+        }
 
+        [Fact]
+        public void Formula()
+        {
+            var roi = new Series();
+            var offset = 0;
+            var amplify = 11;
+            var phase = 90;
+            var freq = 1;
+            roi.Initiate(offset,amplify,phase,freq);
+            //roi.Expression((a, n) => a / (2 * n - 1) / Math.PI, (t, n) => 2 * n - 1);
+            roi.Expression((a, n) => a - n, (t, n) => t + n);//.Times(10);
+            roi.Times(10);
+            Assert.Equal(10, roi.Harmonics.Count());
+            Assert.Equal(1, roi.Harmonics.Last().Length);
+            Assert.Equal(11, roi.Harmonics.Last().Freq);
         }
     }
 }
