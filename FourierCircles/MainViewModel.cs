@@ -19,13 +19,12 @@ namespace FourierCircles
     public class MainViewModel :INotifyPropertyChanged
     {
         private Pipe<double> _pipe;
+        private Series _series;
         public ObservableCollection<Point> Graph { get; set; }
         public ObservableCollection<Harmonic> Harmonics { get; set; }
+        public ObservableCollection<FFTHarmonic> FFTHarmonics { get; set; }
         public Harmonic Last { get; set; }
-        private Series _series;
-
         public event PropertyChangedEventHandler PropertyChanged;
-
         public MainViewModel()
         {
             //var _amplify = 300 / Math.PI;
@@ -43,11 +42,19 @@ namespace FourierCircles
             _series = new Series();
             _series.Initiate(0, 250, 90, 2);
             _series.Expression((a, n) => a / Math.PI / (2 * n - 1), (t, n) => t * (2 * n - 1));
-            _series.Times(50);
+            _series.Times(10);
             Harmonics = new ObservableCollection<Harmonic>(_series.Harmonics);
             _pipe = new Pipe<double>(1500);
             Graph = new ObservableCollection<Point>();
             Last = Harmonics.Last();
+
+            FFTHarmonics = new ObservableCollection<FFTHarmonic>
+            {
+                new FFTHarmonic { Amplify = 0, K=0 }
+                , new FFTHarmonic { Amplify = 10, K=1 }
+                , new FFTHarmonic { Amplify = 6, K=2 }
+                , new FFTHarmonic { Amplify = 30, K=3 }
+            };
         }
 
         public void Run()
